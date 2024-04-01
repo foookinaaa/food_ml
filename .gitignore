@@ -1,0 +1,7 @@
+poetry.lock
+.idea
+.ipynb_checkpoints
+venv
+.pytest_cache
+__pycache__
+*.iml
