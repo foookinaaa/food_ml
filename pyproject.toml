@@ -19,7 +19,7 @@ pytest = "^8.1.1"
 pre-commit = "^3.7.0"
 
 [tool.black]
-max-line-length = 88
+line-length = 88
 
 [tool.isort]
 profile = "black"

@@ -7,10 +7,10 @@
 
 ## Linters and formatters
 In project's used pre-commit hooks which checks following linters/formatters:
-* flake8 (linter)
-* black (auto formatter)
-* isort (import sorting)
-* mypy (type checking)
+* flake8 (linter) # poetry run flake8 --exclude=venv .
+* black (auto formatter) # poetry run black .
+* isort (import sorting) # poetry run isort .
+* mypy (type checking) # poetry run mypy --explicit-package-bases --exclude venv .
 
 also in project's used:
 * pytest (tests)
