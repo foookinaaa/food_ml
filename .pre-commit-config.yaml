@@ -34,4 +34,4 @@ repos:
     hooks:
       - id: mypy
         pass_filenames: false
-        args: ['food_ml']
+        args: ['src']

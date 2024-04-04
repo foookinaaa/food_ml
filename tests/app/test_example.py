@@ -1,4 +1,4 @@
-from food_ml.app.example import is_positive
+from src.app.example import is_positive
 
 
 def test_is_positive_true():
