@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "food-ml"
+name = "mlops-ods"
 version = "0.1.0"
 description = ""
 authors = ["Iuliia Fokina"]
