@@ -1,5 +1,5 @@
-# Food ml
-This project for food classification model with MLOps instruments
+# MLOps ODS
+This project for ml model with MLOps instruments
 
 the methodology of repo (github flow - one main branch, and developing in other brunches):
 - main branch: 'master'
@@ -7,14 +7,14 @@ the methodology of repo (github flow - one main branch, and developing in other 
 
 Docker image (build / run):
 ```commandline
-docker build . -t food_ml_image
-docker run -it food_ml_image /bin/bash
+docker build . -t mlops_ods_image
+docker run -it mlops_ods_image /bin/bash
 ```
 build for linux:
 ```commandline
-docker build . -t food_ml_image --platform linux/amd64
+docker build . -t mlops_ods_image --platform linux/amd64
 ```
 run with port and volumes if necessary:
 ```commandline
-docker run -p 8888:8888 -v {path-to-local-folder-(pwd)}:/app/volumes -it food_ml_image /bin/bash
+docker run -p 8888:8888 -v {path-to-local-folder-(pwd)}:/app/volumes -it mlops_ods_image /bin/bash
 ```
