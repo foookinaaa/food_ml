@@ -20,8 +20,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          ls -la
-          docker build -t ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest .
-          docker push ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+      - name: Extract meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ github.repository_owner }}/${{ github.event.repository.name }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: latest
