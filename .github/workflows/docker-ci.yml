@@ -2,16 +2,25 @@ name: ci
 
 on:
   push:
-    branches: main
+    paths:
+      - 'poetry.lock'
+      - 'pyproject.toml'
+      - 'Dockerfile'
+      - '.github/workflows/docker-ci.yml'
+
 
 jobs:
-  login:
+  build:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Login to GitHub Container Registry
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ github.repository_owner }}/${{ github.repository_name }}:latest .
+          docker push ${{ github.repository_owner }}/${{ github.repository_name }}:latest
