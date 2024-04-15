@@ -22,5 +22,5 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ github.repository_owner }}/${{ github.repository_name }}:latest .
-          docker push ${{ github.repository_owner }}/${{ github.repository_name }}:latest
+          docker build -t ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest .
+          docker push ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
