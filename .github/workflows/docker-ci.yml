@@ -24,7 +24,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ..
           file: ./Dockerfile
           push: true
           tags: ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
