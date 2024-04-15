@@ -1,24 +1,17 @@
-name: Docker CI
+name: ci
 
 on:
   push:
-    paths:
-      - 'poetry.lock'
-      - 'pyproject.toml'
-      - 'Dockerfile'
-      - '.github/workflows/docker.yml'
+    branches: main
 
 jobs:
-  build:
+  login:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.repository_owner }}/${{ github.repository_name }}:latest .
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.repository_owner }}/${{ github.repository_name }}:latest
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
