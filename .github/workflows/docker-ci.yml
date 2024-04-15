@@ -12,10 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
 
     steps:
       - name: Login to GitHub Container Registry
@@ -28,5 +24,6 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v3
         with:
+          context: .
           push: true
           tags: ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
