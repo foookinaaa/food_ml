@@ -20,15 +20,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ github.repository_owner }}/${{ github.event.repository.name }}
-
       - name: Build and push image
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: latest
+          tags: ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
