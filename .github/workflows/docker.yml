@@ -1,0 +1,24 @@
+name: Docker CI
+
+on:
+  push:
+    paths:
+      - 'poetry.lock'
+      - 'pyproject.toml'
+      - 'Dockerfile'
+      - '.github/workflows/docker.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.repository_owner }}/${{ github.repository_name }}:latest .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.repository_owner }}/${{ github.repository_name }}:latest
