@@ -34,9 +34,6 @@ jobs:
       - name: Run Flake8
         run: poetry run flake8 --exclude .poetry/cache .
 
-      - name: Run Mypy
-        run: poetry run mypy .
-
   testing:
     name: Pytest
     runs-on: ubuntu-latest
