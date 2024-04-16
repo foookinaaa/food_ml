@@ -57,7 +57,7 @@ jobs:
           poetry install --no-root
 
       - name: Run Pytest
-        run: poetry run pytest .
+        run: poetry run pytest tests
 
   publish:
     name: Build and Publish

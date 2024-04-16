@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Iuliia Fokina"]
 readme = "README.md"
+packages = [{include = "*", from="src"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -32,6 +33,9 @@ profile = "black"
 [tool.flake8]
 exclude = [".git", "venv"]
 max-line-length = 88
+
+[tool.pytest.ini_options]
+pythonpath = "src"
 
 [build-system]
 requires = ["poetry-core"]
