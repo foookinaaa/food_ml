@@ -81,7 +81,7 @@ jobs:
 
       - name: Publish package to PyPI
         if: github.ref == 'refs/heads/master'
-        run: |
-          echo "Publish package to GitHub Package Registry."
-          poetry config http-basic.pypi __token__ ${{ secrets.GITHUB_TOKEN }}
-          poetry publish --repository pypi
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
