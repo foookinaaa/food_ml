@@ -73,20 +73,12 @@ jobs:
           poetry config --local cache-dir $PWD/.poetry/cache
           poetry install --no-root
 
-      - name: Set new version
-        id: version
-        run: |
-          NEW_VERSION=$(date +%Y.%m.%d)
-          echo "::set-output name=new_version::$NEW_VERSION"
-
-      - name: Set version in pyproject.toml
-        run: |
-          sed -i "s/version = .*/version = \"${NEW_VERSION}\"/g" pyproject.toml
 
       - name: Build package
         if: github.ref == 'refs/heads/master'
         run: |
           echo "Building Python package."
+          poetry version 0.1.$(date +"%Y%m%d%H%M")
           poetry build
 
       - name: Publish package to PyPI
