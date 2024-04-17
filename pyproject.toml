@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mlops-ods"
+name = "mlops_ods"
 version = "0.1.0"
 description = ""
 authors = ["Iuliia Fokina"]

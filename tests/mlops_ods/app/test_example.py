@@ -1,4 +1,4 @@
-from app.example import is_positive
+from mlops_ods.app.example import is_positive
 
 
 def test_is_positive_true():

@@ -10,3 +10,4 @@ dataset
 eda.md
 .DS_Store
 __pycache__/
+dist
