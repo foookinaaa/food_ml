@@ -7,4 +7,4 @@ RUN poetry config virtualenvs.create false
 COPY pyproject.toml poetry.lock ./
 RUN poetry install
 
-# COPY ./src/app/example.py .
+COPY ./src/app/example.py .

@@ -1,12 +1,6 @@
 name: package
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+on: [push]
 
 jobs:
   linting:
@@ -80,13 +74,13 @@ jobs:
           poetry install --no-root
 
       - name: Build package
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.ref == 'refs/heads/master'
         run: |
           echo "Building Python package."
           poetry build
 
       - name: Publish package to PyPI
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.ref == 'refs/heads/master'
         run: |
           echo "Publish package to GitHub Package Registry."
           poetry config http-basic.pypi __token__ ${{ secrets.GITHUB_TOKEN }}
