@@ -1,12 +1,10 @@
+**/.DS_Store
+**/__pycache__
 .idea
 .ipynb_checkpoints
 venv
 .pytest_cache
-__pycache__
 .mypy_cache
 .venv
-*.csv
 dataset
 eda.md
-.DS_Store
-__pycache__/
