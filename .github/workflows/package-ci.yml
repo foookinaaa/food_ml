@@ -74,13 +74,13 @@ jobs:
           poetry install --no-root
 
       - name: Build package
-#        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: |
           echo "Building Python package."
           poetry build
 
       - name: Publish package to PyPI
-#        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
