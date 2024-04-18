@@ -21,6 +21,8 @@ docker run -p 8888:8888 -v {path-to-local-folder-(pwd)}:/app/volumes -it mlops_o
 
 documentation of jupyter notebooks with quarto:
 ```commandline
+quarto render
+
 quarto preview  src/mlops_ods/notebooks/eda.ipynb
 quarto render src/mlops_ods/notebooks/eda.ipynb --to html
 ```
