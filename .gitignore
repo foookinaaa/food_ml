@@ -11,3 +11,6 @@ eda.md
 .DS_Store
 __pycache__/
 dist
+
+/.quarto/
+/_site/
