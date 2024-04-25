@@ -3,20 +3,8 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
 
+from mlops_ods.config import compose_config
 from mlops_ods.train_predict import main
-
-
-@pytest.fixture
-def mock_load_config_yaml():
-    with patch("mlops_ods.config.load_config_yaml") as mock_load:
-        mock_load.return_value = {
-            "features": {
-                "numerical": ["numerical_col1", "numerical_col2"],
-                "categorical": ["cat_col1", "cat_col2"],
-            },
-            "model_params": {"iterations": 100, "verbose": False, "random_seed": 42},
-        }
-        yield mock_load
 
 
 @pytest.fixture
@@ -70,7 +58,6 @@ def mock_roc_auc_score():
 
 
 def test_main_train(
-    mock_load_config_yaml,
     mock_download_kaggle_dataset_if_not_exist,
     mock_pd_read_csv,
     mock_drop_columns,
@@ -79,6 +66,7 @@ def test_main_train(
     mock_save_model,
     mock_roc_auc_score,
 ):
+    cfg = compose_config(overrides=["settings=train"])
     df_mock = pd.DataFrame(
         {
             "tree_dbh": [10],
@@ -106,18 +94,18 @@ def test_main_train(
     mock_pd_read_csv.return_value = df_mock
     clf_mock = MagicMock()
     mock_CatBoostClassifier.return_value = clf_mock
-    main(train=True)
+    main(cfg)
 
     mock_save_model.assert_called_once()
 
 
 def test_main_predict(
-    mock_load_config_yaml,
     mock_pd_read_csv,
     mock_drop_columns,
     mock_preprocess_data,
     mock_load_model,
 ):
+    cfg = compose_config(overrides=["settings=predict"])
     df_mock = pd.DataFrame(
         {
             "tree_dbh": [10],
@@ -145,6 +133,6 @@ def test_main_predict(
     mock_pd_read_csv.return_value = df_mock
     clf_mock = MagicMock()
     mock_load_model.return_value = clf_mock
-    main(train=False)
+    main(cfg)
 
     clf_mock.predict_proba.assert_called_once()
