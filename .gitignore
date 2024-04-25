@@ -15,3 +15,5 @@ dist
 /.quarto/
 /_site/
 catboost_info
+outputs.*
+outputs/
