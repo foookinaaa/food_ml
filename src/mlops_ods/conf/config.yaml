@@ -1,0 +1,4 @@
+defaults:
+  - features: features
+  - model: model_fast
+  - settings: predict
