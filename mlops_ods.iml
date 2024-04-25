@@ -22,6 +22,7 @@
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/src/mlops_ods/notebooks/catboost_info" />
       <excludeFolder url="file://$MODULE_DIR$/src/mlops_ods/catboost_info" />
+      <excludeFolder url="file://$MODULE_DIR$/mlops_ods/dataset" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (mlops_ods)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

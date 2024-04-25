@@ -16,3 +16,4 @@ dist
 /_site/
 catboost_info
 outputs.*
+outputs/
