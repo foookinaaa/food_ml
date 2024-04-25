@@ -3,6 +3,7 @@ import os
 import catboost
 import hydra
 import pandas as pd
+from hydra.utils import instantiate
 from omegaconf import DictConfig
 from sklearn import metrics
 
@@ -44,12 +45,17 @@ def main(cfg: DictConfig):
 
     if train_mode:
         logger.info("Fit model")
-        clf = catboost.CatBoostClassifier(
-            iterations=cfg.model.iterations,
-            verbose=cfg.model.verbose,
-            random_seed=cfg.model.random_seed,
-            cat_features=cat_cols,
-        )
+        if cfg.settings.status == "object":
+            clf = instantiate(cfg.model)
+            clf.set_params(cat_features=cat_cols)
+        else:
+            clf = catboost.CatBoostClassifier(
+                iterations=cfg.model.iterations,
+                verbose=cfg.model.verbose,
+                random_seed=cfg.model.random_seed,
+                cat_features=cat_cols,
+                thread_count=int(cfg.settings.cores) // 2,
+            )
         clf.fit(df[total_cols], df["health"])
         predictions = clf.predict_proba(df[total_cols])
         roc_auc = metrics.roc_auc_score(df["health"], predictions, multi_class="ovr")

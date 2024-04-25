@@ -1,0 +1,34 @@
+features:
+  numerical:
+  - tree_dbh
+  - curb_loc
+  - steward
+  - guards
+  - sidewalk
+  - problems
+  - root_stone
+  - root_grate
+  - root_other
+  - trunk_wire
+  - trnk_light
+  - trnk_other
+  - brch_light
+  - brch_shoe
+  - brch_other
+  categorical:
+  - spc_common
+  - zip_city
+  - borough
+  - user_type
+model:
+  _target_: catboost.CatBoostClassifier
+  random_seed: 42
+  iterations: 500
+  verbose: false
+settings:
+  path_to_data: mlops_ods/dataset
+  file_name: 2015-street-tree-census-tree-data.csv
+  path_to_model: resources
+  model_name: model.bin
+  train_mode: true
+  cores: ${oc.env:CORES}
