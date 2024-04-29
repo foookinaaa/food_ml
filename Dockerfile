@@ -17,12 +17,12 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry install
 
 # Snakemake
-RUN apt-get -y install graphviz
-RUN pip install snakemake
+#RUN apt-get -y install graphviz
+#RUN pip install snakemake
+#
+## install package
+#COPY dist/mlops_ods-0.1.0-py3-none-any.whl .
+#RUN pip install mlops_ods-0.1.0-py3-none-any.whl
+#RUN rm mlops_ods-0.1.0-py3-none-any.whl
 
-# install package
-COPY dist/mlops_ods-0.1.0-py3-none-any.whl .
-RUN pip install mlops_ods-0.1.0-py3-none-any.whl
-RUN rm mlops_ods-0.1.0-py3-none-any.whl
-
-COPY ./ ./
+#COPY ./ ./
