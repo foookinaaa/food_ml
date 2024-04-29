@@ -1,9 +1,13 @@
 # MLOps ODS
 This project for ml model with MLOps instruments
 
-the methodology of repo (github flow - one main branch, and developing in other brunches):
+the methodology of repo (GitHub flow - one main branch, and developing in other brunches):
 - main branch: 'master'
 - other branches: 'fix-', 'feature-', 'model-', 'experiment-'
+
+```commandline
+poetry build --format=wheel
+```
 
 Docker image (build / run):
 ```commandline
@@ -25,4 +29,13 @@ quarto render
 
 quarto preview  src/mlops_ods/notebooks/eda.ipynb
 quarto render src/mlops_ods/notebooks/eda.ipynb --to html
+```
+
+snakemake command inside docker:
+```commandline
+snakemake --cores 1
+snakemake --dag | dot -Tsvg > dag.svg
+
+docker ps
+docker cp <CONTAINER ID>:/app/dag.svg .
 ```
