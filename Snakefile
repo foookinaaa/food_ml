@@ -2,7 +2,24 @@ DATASETS = ["base", "research"]
 
 rule all:
     input:
-        expand("src/resources/model_{dataset}.bin", dataset=DATASETS)
+        expand("src/resources/model_{dataset}.bin", dataset=DATASETS),
+        expand("src/resources/model_bigger_{dataset}.bin", dataset=DATASETS)
+
+rule model_fit_large_base:
+    input:
+        "src/mlops_ods/dataset/preproc_data_base.csv"
+    output:
+        "src/resources/model_bigger_base.bin"
+    script:
+        "src/mlops_ods/snakemake_scripts/model_fit_bigger.py"
+
+rule model_fit_large_research:
+    input:
+        "src/mlops_ods/dataset/preproc_data_research.csv"
+    output:
+        "src/resources/model_bigger_research.bin"
+    script:
+        "src/mlops_ods/snakemake_scripts/model_fit_bigger.py"
 
 rule model_fit_base:
     input:
