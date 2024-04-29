@@ -1,39 +1,25 @@
+from multiprocessing import cpu_count
 DATASETS = ["base", "research"]
 
 rule all:
     input:
         expand("src/resources/model_{dataset}.bin", dataset=DATASETS),
         expand("src/resources/model_bigger_{dataset}.bin", dataset=DATASETS)
+    threads: cpu_count() // 2
 
-rule model_fit_large_base:
+rule model_fit_large:
     input:
-        "src/mlops_ods/dataset/preproc_data_base.csv"
+        "src/mlops_ods/dataset/preproc_data_{dataset}.csv"
     output:
-        "src/resources/model_bigger_base.bin"
+        "src/resources/model_bigger_{dataset}.bin"
     script:
         "src/mlops_ods/snakemake_scripts/model_fit_bigger.py"
 
-rule model_fit_large_research:
+rule model_fit:
     input:
-        "src/mlops_ods/dataset/preproc_data_research.csv"
+        "src/mlops_ods/dataset/preproc_data_{dataset}.csv"
     output:
-        "src/resources/model_bigger_research.bin"
-    script:
-        "src/mlops_ods/snakemake_scripts/model_fit_bigger.py"
-
-rule model_fit_base:
-    input:
-        "src/mlops_ods/dataset/preproc_data_base.csv"
-    output:
-        "src/resources/model_base.bin"
-    script:
-        "src/mlops_ods/snakemake_scripts/model_fit.py"
-
-rule model_fit_research:
-    input:
-        "src/mlops_ods/dataset/preproc_data_research.csv"
-    output:
-        "src/resources/model_research.bin"
+        "src/resources/model_{dataset}.bin"
     script:
         "src/mlops_ods/snakemake_scripts/model_fit.py"
 

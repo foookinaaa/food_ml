@@ -33,7 +33,7 @@ quarto render src/mlops_ods/notebooks/eda.ipynb --to html
 
 snakemake command inside docker:
 ```commandline
-snakemake --cores 1
+snakemake --cores 10
 snakemake --dag | dot -Tsvg > dag.svg
 
 docker ps
