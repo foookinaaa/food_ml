@@ -7,3 +7,15 @@ stages:
     - src/mlops_ods/dvc_functions/preprocessing.py
     outs:
     - src/mlops_ods/dataset/processed/train.csv
+  scaling:
+    cmd: python src/mlops_ods/dvc_functions cli-train-scaler src/mlops_ods/dataset/processed/train.csv
+      src/mlops_ods/models/scaler.pickle
+      src/mlops_ods/dataset/features/train.csv
+      src/mlops_ods/dataset/features/test.csv
+    deps:
+      - src/mlops_ods/dataset/processed/train.csv
+      - src/mlops_ods/dvc_functions/scaler.py
+    outs:
+      - src/mlops_ods/models/scaler.pickle
+      - src/mlops_ods/dataset/features/train.csv
+      - src/mlops_ods/dataset/features/test.csv

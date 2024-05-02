@@ -2,9 +2,10 @@ from pathlib import Path
 
 import click
 import pandas as pd
-from cli import cli
 
 from mlops_ods.utils.utils_model import drop_columns, preprocess_data
+
+from .cli import cli
 
 
 @cli.command()

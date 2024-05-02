@@ -10,10 +10,36 @@ stages:
       size: 229927395
     - path: src/mlops_ods/dvc_functions/preprocessing.py
       hash: md5
-      md5: e2a2f3a021954fd76aec0b30b3d35604
+      md5: 183a8e6865bddad024f0725be09a8dff
       size: 499
     outs:
     - path: src/mlops_ods/dataset/processed/train.csv
       hash: md5
       md5: 0ad98c94f612946504ea5eb7ca4ad300
       size: 56055105
+  scaling:
+    cmd: python src/mlops_ods/dvc_functions cli-train-scaler src/mlops_ods/dataset/processed/train.csv
+      src/mlops_ods/models/scaler.pickle src/mlops_ods/dataset/features/train.csv
+      src/mlops_ods/dataset/features/test.csv
+    deps:
+    - path: src/mlops_ods/dataset/processed/train.csv
+      hash: md5
+      md5: 0ad98c94f612946504ea5eb7ca4ad300
+      size: 56055105
+    - path: src/mlops_ods/dvc_functions/scaler.py
+      hash: md5
+      md5: e9b7f5e4460aee9b455e335009198cd2
+      size: 1102
+    outs:
+    - path: src/mlops_ods/dataset/features/test.csv
+      hash: md5
+      md5: 2ac33f28ce89c52e911f435925cfc844
+      size: 5970294
+    - path: src/mlops_ods/dataset/features/train.csv
+      hash: md5
+      md5: c084e5bb1cd85a78824b7a74f4ef21cf
+      size: 13930429
+    - path: src/mlops_ods/models/scaler.pickle
+      hash: md5
+      md5: cb1f7740571f543dc4cd6e15326540c4
+      size: 1075
