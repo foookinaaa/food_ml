@@ -1,0 +1,4 @@
+from mlops_ods.dvc_functions import cli, preprocessing  # noqa: F401
+
+if __name__ == "__main__":
+    cli.cli()

@@ -1,0 +1,19 @@
+schema: '2.0'
+stages:
+  preprocessing:
+    cmd: python src/mlops_ods/dvc_functions cli-preprocessing src/mlops_ods/dataset/2015-street-tree-census-tree-data.csv
+      src/mlops_ods/dataset/processed/train.csv
+    deps:
+    - path: src/mlops_ods/dataset/2015-street-tree-census-tree-data.csv
+      hash: md5
+      md5: e578c608a9abd03761bbfd4ba9cf144f
+      size: 229927395
+    - path: src/mlops_ods/dvc_functions/preprocessing.py
+      hash: md5
+      md5: e2a2f3a021954fd76aec0b30b3d35604
+      size: 499
+    outs:
+    - path: src/mlops_ods/dataset/processed/train.csv
+      hash: md5
+      md5: 0ad98c94f612946504ea5eb7ca4ad300
+      size: 56055105

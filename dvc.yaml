@@ -1,0 +1,9 @@
+stages:
+  preprocessing:
+    cmd: python src/mlops_ods/dvc_functions cli-preprocessing src/mlops_ods/dataset/2015-street-tree-census-tree-data.csv
+      src/mlops_ods/dataset/processed/train.csv
+    deps:
+    - src/mlops_ods/dataset/2015-street-tree-census-tree-data.csv
+    - src/mlops_ods/dvc_functions/preprocessing.py
+    outs:
+    - src/mlops_ods/dataset/processed/train.csv
