@@ -2,6 +2,7 @@ import pickle
 from pathlib import Path
 
 import click
+import dvc.api
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -12,7 +13,10 @@ from .cli import cli
 
 
 def train_scaler(df: pd.DataFrame) -> tuple[StandardScaler, pd.DataFrame, pd.DataFrame]:
-    train, test = train_test_split(df, test_size=0.3, random_state=42)
+    params = dvc.api.params_show()
+    train, test = train_test_split(
+        df, test_size=params["test_size"], random_state=params["random_state"]
+    )
 
     sc = StandardScaler()
     sc.fit(train)
