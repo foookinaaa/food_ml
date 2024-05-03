@@ -1,0 +1,21 @@
+name: dvc-ci
+
+on:
+  push:
+    paths:
+      - 'dvc.yaml'
+
+
+jobs:
+  dvc_pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+
+      - name: Reproduce DVC pipeline
+        run: dvc repro
