@@ -17,3 +17,4 @@ dist
 catboost_info
 outputs.*
 outputs/
+/summary.json

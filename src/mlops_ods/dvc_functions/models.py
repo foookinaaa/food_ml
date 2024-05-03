@@ -1,3 +1,4 @@
+import json
 import pickle
 from pathlib import Path
 
@@ -34,3 +35,21 @@ def cli_train(
     train_target = np.load(train_target_path)
     model = train(train_features, train_target)
     pickle.dump(model, model_path.open("wb"))
+
+
+@cli.command()
+@click.argument("test_frame_path", type=Path)
+@click.argument("test_target_path", type=Path)
+@click.argument("model_path", type=Path)
+@click.argument("metric_path", type=Path)
+def cli_test(
+    test_frame_path: Path,
+    test_target_path: Path,
+    model_path: Path,
+    metric_path: Path,
+):
+    test_features = np.load(test_frame_path)
+    test_target = np.load(test_target_path)
+    model = pickle.load(model_path.open("rb"))
+    result = test(model, test_features, test_target)
+    json.dump(result, metric_path.open("w"))
