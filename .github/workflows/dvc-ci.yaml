@@ -17,5 +17,8 @@ jobs:
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
 
+      - name: Pull data from remote DVC storage
+        run: dvc pull
+
       - name: Reproduce DVC pipeline
         run: dvc repro
