@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'dvc.yaml'
+      - '.github/workflows/dvc-ci.yml'
 
 
 jobs:
