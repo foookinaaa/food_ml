@@ -116,3 +116,24 @@ stages:
       hash: md5
       md5: b0f320733c93ed5da8420b9004aefa75
       size: 1565344
+  model_train:
+    cmd: python src/mlops_ods/dvc_functions cli-train src/mlops_ods/dataset/prepared/train_features.npy
+      src/mlops_ods/dataset/prepared/train_target.npy src/mlops_ods/models/model_lr.pickle
+    deps:
+    - path: src/mlops_ods/dataset/prepared/train_features.npy
+      hash: md5
+      md5: 0577d486d0ca0400f447bb39eca7e3b4
+      size: 54782528
+    - path: src/mlops_ods/dataset/prepared/train_target.npy
+      hash: md5
+      md5: c03586abe5f74ff6bfc5f6e8a846e2ac
+      size: 3652288
+    - path: src/mlops_ods/dvc_functions/models.py
+      hash: md5
+      md5: 911ac8ce40801023e1ea7e6f2b8b6bab
+      size: 1112
+    outs:
+    - path: src/mlops_ods/models/model_lr.pickle
+      hash: md5
+      md5: 2cc13c16eb6d2a3c551784da045efb91
+      size: 1090

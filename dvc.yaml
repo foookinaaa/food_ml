@@ -35,3 +35,13 @@ stages:
       outs:
         - src/mlops_ods/dataset/prepared/${item}_features.npy
         - src/mlops_ods/dataset/prepared/${item}_target.npy
+  model_train:
+    cmd: python src/mlops_ods/dvc_functions cli-train src/mlops_ods/dataset/prepared/train_features.npy
+      src/mlops_ods/dataset/prepared/train_target.npy
+      src/mlops_ods/models/model_lr.pickle
+    deps:
+      - src/mlops_ods/dataset/prepared/train_features.npy
+      - src/mlops_ods/dataset/prepared/train_target.npy
+      - src/mlops_ods/dvc_functions/models.py
+    outs:
+      - src/mlops_ods/models/model_lr.pickle
