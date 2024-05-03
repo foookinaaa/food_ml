@@ -4,11 +4,23 @@ from pathlib import Path
 
 import click
 import dvc.api
+import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.figure import Figure
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
+from sklearn.metrics import ConfusionMatrixDisplay, classification_report
 
 from .cli import cli
+
+
+def conf_matrix(y_true: np.ndarray, y_pred: np.ndarray) -> Figure:
+    plt.ioff()
+    fig, ax = plt.subplots(figsize=(5, 5))
+    ConfusionMatrixDisplay.from_predictions(y_true, y_pred, ax=ax, colorbar=False)
+    ax.xaxis.set_tick_params(rotation=90)
+    ax.set_title("Confusion Matrix")
+    plt.tight_layout()
+    return fig
 
 
 def train(data: np.ndarray, target: np.ndarray) -> LogisticRegression:
@@ -18,9 +30,12 @@ def train(data: np.ndarray, target: np.ndarray) -> LogisticRegression:
     return model_lr
 
 
-def test(model: LogisticRegression, data: np.ndarray, target: np.ndarray) -> dict:
+def test(
+    model: LogisticRegression, data: np.ndarray, target: np.ndarray
+) -> tuple[dict, Figure]:
     predicts = model.predict(data)
-    return classification_report(target, predicts, output_dict=True)
+    fig = conf_matrix(target, predicts)
+    return classification_report(target, predicts, output_dict=True), fig
 
 
 @cli.command()
@@ -43,14 +58,17 @@ def cli_train(
 @click.argument("test_target_path", type=Path)
 @click.argument("model_path", type=Path)
 @click.argument("metric_path", type=Path)
+@click.argument("figure_path", type=Path)
 def cli_test(
     test_frame_path: Path,
     test_target_path: Path,
     model_path: Path,
     metric_path: Path,
+    figure_path: Path,
 ):
     test_features = np.load(test_frame_path)
     test_target = np.load(test_target_path)
     model = pickle.load(model_path.open("rb"))
-    result = test(model, test_features, test_target)
+    result, fig = test(model, test_features, test_target)
     json.dump(result, metric_path.open("w"))
+    plt.savefig(figure_path)

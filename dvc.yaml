@@ -53,6 +53,7 @@ stages:
       src/mlops_ods/dataset/prepared/test_target.npy
       src/mlops_ods/models/model_lr.pickle
       summary.json
+      conf_matrix.png
     params:
       - log_reg
     deps:
@@ -61,3 +62,5 @@ stages:
       - src/mlops_ods/dvc_functions/models.py
     metrics:
       - summary.json
+    plots:
+      - conf_matrix.png

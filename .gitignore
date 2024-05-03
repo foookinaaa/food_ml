@@ -18,3 +18,4 @@ catboost_info
 outputs.*
 outputs/
 /summary.json
+/conf_matrix.png

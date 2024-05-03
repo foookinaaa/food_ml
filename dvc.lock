@@ -134,8 +134,8 @@ stages:
       size: 3652288
     - path: src/mlops_ods/dvc_functions/models.py
       hash: md5
-      md5: ebea9d622ee09c8bdd926f67e1b551c6
-      size: 1606
+      md5: 7ea980bf0c14a43e1533def2f4c13935
+      size: 2192
     outs:
     - path: src/mlops_ods/models/model_lr.pickle
       hash: md5
@@ -144,7 +144,7 @@ stages:
   model_test:
     cmd: python src/mlops_ods/dvc_functions cli-test src/mlops_ods/dataset/prepared/test_features.npy
       src/mlops_ods/dataset/prepared/test_target.npy src/mlops_ods/models/model_lr.pickle
-      summary.json
+      summary.json conf_matrix.png
     deps:
     - path: src/mlops_ods/dataset/prepared/test_features.npy
       hash: md5
@@ -156,8 +156,8 @@ stages:
       size: 1565344
     - path: src/mlops_ods/dvc_functions/models.py
       hash: md5
-      md5: ebea9d622ee09c8bdd926f67e1b551c6
-      size: 1606
+      md5: 7ea980bf0c14a43e1533def2f4c13935
+      size: 2192
     params:
       params.yaml:
         log_reg:
@@ -165,6 +165,10 @@ stages:
           max_iter: 300
           C: 10
     outs:
+    - path: conf_matrix.png
+      hash: md5
+      md5: 99c5653233f84c6ea02ae9eb08a9fc75
+      size: 15894
     - path: summary.json
       hash: md5
       md5: 9f41c2070a00673624dc75aac7850bbe
