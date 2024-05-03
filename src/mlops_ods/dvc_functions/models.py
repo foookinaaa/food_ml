@@ -3,6 +3,7 @@ import pickle
 from pathlib import Path
 
 import click
+import dvc.api
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
@@ -11,8 +12,8 @@ from .cli import cli
 
 
 def train(data: np.ndarray, target: np.ndarray) -> LogisticRegression:
-    model_params = {"random_state": 42, "max_iter": 300, "C": 10}
-    model_lr = LogisticRegression(**model_params)
+    params = dvc.api.params_show()
+    model_lr = LogisticRegression(**params["log_reg"])
     model_lr.fit(data, target)
     return model_lr
 

@@ -30,6 +30,10 @@ stages:
       hash: md5
       md5: 8d2e9c3f2c06898ea4689247c6a04304
       size: 2013
+    params:
+      params.yaml:
+        random_state: 42
+        test_size: 0.3
     outs:
     - path: src/mlops_ods/dataset/features/test.csv
       hash: md5
@@ -130,8 +134,8 @@ stages:
       size: 3652288
     - path: src/mlops_ods/dvc_functions/models.py
       hash: md5
-      md5: 51613a2ae00d3efecf259e79d17e5583
-      size: 1634
+      md5: ebea9d622ee09c8bdd926f67e1b551c6
+      size: 1606
     outs:
     - path: src/mlops_ods/models/model_lr.pickle
       hash: md5
@@ -152,8 +156,14 @@ stages:
       size: 1565344
     - path: src/mlops_ods/dvc_functions/models.py
       hash: md5
-      md5: 51613a2ae00d3efecf259e79d17e5583
-      size: 1634
+      md5: ebea9d622ee09c8bdd926f67e1b551c6
+      size: 1606
+    params:
+      params.yaml:
+        log_reg:
+          random_state: 42
+          max_iter: 300
+          C: 10
     outs:
     - path: summary.json
       hash: md5
