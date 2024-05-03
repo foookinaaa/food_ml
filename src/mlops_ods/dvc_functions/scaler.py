@@ -3,6 +3,7 @@ from pathlib import Path
 
 import click
 import dvc.api
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -21,6 +22,10 @@ def train_scaler(df: pd.DataFrame) -> tuple[StandardScaler, pd.DataFrame, pd.Dat
     sc = StandardScaler()
     sc.fit(train)
     return sc, train, test
+
+
+def apply_scaler(scaler: StandardScaler, df: pd.DataFrame) -> pd.DataFrame:
+    return scaler.transform(df)
 
 
 @cli.command()
@@ -42,3 +47,21 @@ def cli_train_scaler(
     pickle.dump(scaler, scaler_path.open("wb"))
     train.to_csv(train_features_path, index=False)
     test.to_csv(test_features_path, index=False)
+
+
+@cli.command()
+@click.argument("input_frame_path", type=Path)
+@click.argument("scaler_path", type=Path)
+@click.argument("result_frame_path", type=Path)
+def cli_apply_scaler(
+    input_frame_path: Path,
+    scaler_path: Path,
+    result_frame_path: Path,
+):
+    cfg = compose_config()
+    num_cols = cfg.features.numerical
+
+    df = pd.read_csv(input_frame_path)
+    scaler = pickle.load(scaler_path.open("rb"))
+    result = apply_scaler(scaler, df[num_cols])
+    np.save(result_frame_path, result)

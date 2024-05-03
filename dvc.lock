@@ -28,8 +28,8 @@ stages:
       size: 56055105
     - path: src/mlops_ods/dvc_functions/scaler.py
       hash: md5
-      md5: 7964243702f54c783cb734272ccc76c1
-      size: 1209
+      md5: 9e0c2f9f3e9b8039ee1ab803cf2628bf
+      size: 1865
     outs:
     - path: src/mlops_ods/dataset/features/test.csv
       hash: md5
@@ -43,3 +43,66 @@ stages:
       hash: md5
       md5: cb1f7740571f543dc4cd6e15326540c4
       size: 1075
+  apply_scaling:
+    cmd: python src/mlops_ods/dvc_functions cli-apply-scaler src/mlops_ods/dataset/features/train.csv
+      src/mlops_ods/models/scaler.pickle src/mlops_ods/dataset/prepared/train_features.npy
+    deps:
+    - path: src/mlops_ods/dataset/features/train.csv
+      hash: md5
+      md5: c084e5bb1cd85a78824b7a74f4ef21cf
+      size: 13930429
+    - path: src/mlops_ods/dvc_functions/scaler.py
+      hash: md5
+      md5: 9e0c2f9f3e9b8039ee1ab803cf2628bf
+      size: 1865
+    - path: src/mlops_ods/models/scaler.pickle
+      hash: md5
+      md5: cb1f7740571f543dc4cd6e15326540c4
+      size: 1075
+    outs:
+    - path: src/mlops_ods/dataset/prepared/train_features.npy
+      hash: md5
+      md5: 0577d486d0ca0400f447bb39eca7e3b4
+      size: 54782528
+  apply_scaling@train:
+    cmd: python src/mlops_ods/dvc_functions cli-apply-scaler src/mlops_ods/dataset/features/train.csv
+      src/mlops_ods/models/scaler.pickle src/mlops_ods/dataset/prepared/train_features.npy
+    deps:
+    - path: src/mlops_ods/dataset/features/train.csv
+      hash: md5
+      md5: c084e5bb1cd85a78824b7a74f4ef21cf
+      size: 13930429
+    - path: src/mlops_ods/dvc_functions/scaler.py
+      hash: md5
+      md5: 9e0c2f9f3e9b8039ee1ab803cf2628bf
+      size: 1865
+    - path: src/mlops_ods/models/scaler.pickle
+      hash: md5
+      md5: cb1f7740571f543dc4cd6e15326540c4
+      size: 1075
+    outs:
+    - path: src/mlops_ods/dataset/prepared/train_features.npy
+      hash: md5
+      md5: 0577d486d0ca0400f447bb39eca7e3b4
+      size: 54782528
+  apply_scaling@test:
+    cmd: python src/mlops_ods/dvc_functions cli-apply-scaler src/mlops_ods/dataset/features/test.csv
+      src/mlops_ods/models/scaler.pickle src/mlops_ods/dataset/prepared/test_features.npy
+    deps:
+    - path: src/mlops_ods/dataset/features/test.csv
+      hash: md5
+      md5: 2ac33f28ce89c52e911f435925cfc844
+      size: 5970294
+    - path: src/mlops_ods/dvc_functions/scaler.py
+      hash: md5
+      md5: 9e0c2f9f3e9b8039ee1ab803cf2628bf
+      size: 1865
+    - path: src/mlops_ods/models/scaler.pickle
+      hash: md5
+      md5: cb1f7740571f543dc4cd6e15326540c4
+      size: 1075
+    outs:
+    - path: src/mlops_ods/dataset/prepared/test_features.npy
+      hash: md5
+      md5: 0bf1f440c18694c8242fe22451d89796
+      size: 23478368

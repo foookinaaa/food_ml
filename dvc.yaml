@@ -19,3 +19,17 @@ stages:
       - src/mlops_ods/models/scaler.pickle
       - src/mlops_ods/dataset/features/train.csv
       - src/mlops_ods/dataset/features/test.csv
+  apply_scaling:
+    foreach:
+      - train
+      - test
+    do:
+      cmd: python src/mlops_ods/dvc_functions cli-apply-scaler src/mlops_ods/dataset/features/${item}.csv
+        src/mlops_ods/models/scaler.pickle
+        src/mlops_ods/dataset/prepared/${item}_features.npy
+      deps:
+        - src/mlops_ods/dataset/features/${item}.csv
+        - src/mlops_ods/models/scaler.pickle
+        - src/mlops_ods/dvc_functions/scaler.py
+      outs:
+        - src/mlops_ods/dataset/prepared/${item}_features.npy
