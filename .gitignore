@@ -19,3 +19,4 @@ outputs.*
 outputs/
 /summary.json
 /conf_matrix.png
+creds
