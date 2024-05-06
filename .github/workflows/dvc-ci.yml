@@ -26,3 +26,6 @@ jobs:
 
       - name: Reproduce DVC pipeline
         run: dvc repro
+
+      - name: Push results of DVC pipeline
+        run: dvc push
