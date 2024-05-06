@@ -1,0 +1,175 @@
+schema: '2.0'
+stages:
+  preprocessing:
+    cmd: python src/mlops_ods/dvc_functions cli-preprocessing src/mlops_ods/dataset/2015-street-tree-census-tree-data.csv
+      src/mlops_ods/dataset/processed/train.csv
+    deps:
+    - path: src/mlops_ods/dataset/2015-street-tree-census-tree-data.csv
+      hash: md5
+      md5: e578c608a9abd03761bbfd4ba9cf144f
+      size: 229927395
+    - path: src/mlops_ods/dvc_functions/preprocessing.py
+      hash: md5
+      md5: eb2259fc16cdc9d2e9c10ee945633c2a
+      size: 500
+    outs:
+    - path: src/mlops_ods/dataset/processed/train.csv
+      hash: md5
+      md5: 0ad98c94f612946504ea5eb7ca4ad300
+      size: 56055105
+  scaling:
+    cmd: python src/mlops_ods/dvc_functions cli-train-scaler src/mlops_ods/dataset/processed/train.csv
+      src/mlops_ods/models/scaler.pickle src/mlops_ods/dataset/features/train.csv
+      src/mlops_ods/dataset/features/test.csv
+    deps:
+    - path: src/mlops_ods/dataset/processed/train.csv
+      hash: md5
+      md5: 0ad98c94f612946504ea5eb7ca4ad300
+      size: 56055105
+    - path: src/mlops_ods/dvc_functions/scaler.py
+      hash: md5
+      md5: 8d2e9c3f2c06898ea4689247c6a04304
+      size: 2013
+    params:
+      params.yaml:
+        random_state: 42
+        test_size: 0.3
+    outs:
+    - path: src/mlops_ods/dataset/features/test.csv
+      hash: md5
+      md5: 1766dc6710a893abfa1920e8d9aaaf01
+      size: 6361605
+    - path: src/mlops_ods/dataset/features/train.csv
+      hash: md5
+      md5: b75aca39a95b197b23d7739fb46a58ca
+      size: 14843476
+    - path: src/mlops_ods/models/scaler.pickle
+      hash: md5
+      md5: cb1f7740571f543dc4cd6e15326540c4
+      size: 1075
+  apply_scaling:
+    cmd: python src/mlops_ods/dvc_functions cli-apply-scaler src/mlops_ods/dataset/features/train.csv
+      src/mlops_ods/models/scaler.pickle src/mlops_ods/dataset/prepared/train_features.npy
+    deps:
+    - path: src/mlops_ods/dataset/features/train.csv
+      hash: md5
+      md5: c084e5bb1cd85a78824b7a74f4ef21cf
+      size: 13930429
+    - path: src/mlops_ods/dvc_functions/scaler.py
+      hash: md5
+      md5: 9e0c2f9f3e9b8039ee1ab803cf2628bf
+      size: 1865
+    - path: src/mlops_ods/models/scaler.pickle
+      hash: md5
+      md5: cb1f7740571f543dc4cd6e15326540c4
+      size: 1075
+    outs:
+    - path: src/mlops_ods/dataset/prepared/train_features.npy
+      hash: md5
+      md5: 0577d486d0ca0400f447bb39eca7e3b4
+      size: 54782528
+  apply_scaling@train:
+    cmd: python src/mlops_ods/dvc_functions cli-apply-scaler src/mlops_ods/dataset/features/train.csv
+      src/mlops_ods/models/scaler.pickle src/mlops_ods/dataset/prepared/train_features.npy
+      src/mlops_ods/dataset/prepared/train_target.npy
+    deps:
+    - path: src/mlops_ods/dataset/features/train.csv
+      hash: md5
+      md5: b75aca39a95b197b23d7739fb46a58ca
+      size: 14843476
+    - path: src/mlops_ods/dvc_functions/scaler.py
+      hash: md5
+      md5: 8d2e9c3f2c06898ea4689247c6a04304
+      size: 2013
+    - path: src/mlops_ods/models/scaler.pickle
+      hash: md5
+      md5: cb1f7740571f543dc4cd6e15326540c4
+      size: 1075
+    outs:
+    - path: src/mlops_ods/dataset/prepared/train_features.npy
+      hash: md5
+      md5: 0577d486d0ca0400f447bb39eca7e3b4
+      size: 54782528
+    - path: src/mlops_ods/dataset/prepared/train_target.npy
+      hash: md5
+      md5: c03586abe5f74ff6bfc5f6e8a846e2ac
+      size: 3652288
+  apply_scaling@test:
+    cmd: python src/mlops_ods/dvc_functions cli-apply-scaler src/mlops_ods/dataset/features/test.csv
+      src/mlops_ods/models/scaler.pickle src/mlops_ods/dataset/prepared/test_features.npy
+      src/mlops_ods/dataset/prepared/test_target.npy
+    deps:
+    - path: src/mlops_ods/dataset/features/test.csv
+      hash: md5
+      md5: 1766dc6710a893abfa1920e8d9aaaf01
+      size: 6361605
+    - path: src/mlops_ods/dvc_functions/scaler.py
+      hash: md5
+      md5: 8d2e9c3f2c06898ea4689247c6a04304
+      size: 2013
+    - path: src/mlops_ods/models/scaler.pickle
+      hash: md5
+      md5: cb1f7740571f543dc4cd6e15326540c4
+      size: 1075
+    outs:
+    - path: src/mlops_ods/dataset/prepared/test_features.npy
+      hash: md5
+      md5: 0bf1f440c18694c8242fe22451d89796
+      size: 23478368
+    - path: src/mlops_ods/dataset/prepared/test_target.npy
+      hash: md5
+      md5: b0f320733c93ed5da8420b9004aefa75
+      size: 1565344
+  model_train:
+    cmd: python src/mlops_ods/dvc_functions cli-train src/mlops_ods/dataset/prepared/train_features.npy
+      src/mlops_ods/dataset/prepared/train_target.npy src/mlops_ods/models/model_lr.pickle
+    deps:
+    - path: src/mlops_ods/dataset/prepared/train_features.npy
+      hash: md5
+      md5: 0577d486d0ca0400f447bb39eca7e3b4
+      size: 54782528
+    - path: src/mlops_ods/dataset/prepared/train_target.npy
+      hash: md5
+      md5: c03586abe5f74ff6bfc5f6e8a846e2ac
+      size: 3652288
+    - path: src/mlops_ods/dvc_functions/models.py
+      hash: md5
+      md5: 7ea980bf0c14a43e1533def2f4c13935
+      size: 2192
+    outs:
+    - path: src/mlops_ods/models/model_lr.pickle
+      hash: md5
+      md5: 2cc13c16eb6d2a3c551784da045efb91
+      size: 1090
+  model_test:
+    cmd: python src/mlops_ods/dvc_functions cli-test src/mlops_ods/dataset/prepared/test_features.npy
+      src/mlops_ods/dataset/prepared/test_target.npy src/mlops_ods/models/model_lr.pickle
+      summary.json conf_matrix.png
+    deps:
+    - path: src/mlops_ods/dataset/prepared/test_features.npy
+      hash: md5
+      md5: 0bf1f440c18694c8242fe22451d89796
+      size: 23478368
+    - path: src/mlops_ods/dataset/prepared/test_target.npy
+      hash: md5
+      md5: b0f320733c93ed5da8420b9004aefa75
+      size: 1565344
+    - path: src/mlops_ods/dvc_functions/models.py
+      hash: md5
+      md5: 7ea980bf0c14a43e1533def2f4c13935
+      size: 2192
+    params:
+      params.yaml:
+        log_reg:
+          random_state: 42
+          max_iter: 300
+          C: 10
+    outs:
+    - path: conf_matrix.png
+      hash: md5
+      md5: 99c5653233f84c6ea02ae9eb08a9fc75
+      size: 15894
+    - path: summary.json
+      hash: md5
+      md5: 9f41c2070a00673624dc75aac7850bbe
+      size: 661

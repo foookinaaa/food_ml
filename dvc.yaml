@@ -1,0 +1,66 @@
+stages:
+  preprocessing:
+    cmd: python src/mlops_ods/dvc_functions cli-preprocessing src/mlops_ods/dataset/2015-street-tree-census-tree-data.csv
+      src/mlops_ods/dataset/processed/train.csv
+    deps:
+    - src/mlops_ods/dataset/2015-street-tree-census-tree-data.csv
+    - src/mlops_ods/dvc_functions/preprocessing.py
+    outs:
+    - src/mlops_ods/dataset/processed/train.csv
+  scaling:
+    cmd: python src/mlops_ods/dvc_functions cli-train-scaler src/mlops_ods/dataset/processed/train.csv
+      src/mlops_ods/models/scaler.pickle
+      src/mlops_ods/dataset/features/train.csv
+      src/mlops_ods/dataset/features/test.csv
+    params:
+      - test_size
+      - random_state
+    deps:
+      - src/mlops_ods/dataset/processed/train.csv
+      - src/mlops_ods/dvc_functions/scaler.py
+    outs:
+      - src/mlops_ods/models/scaler.pickle
+      - src/mlops_ods/dataset/features/train.csv
+      - src/mlops_ods/dataset/features/test.csv
+  apply_scaling:
+    foreach:
+      - train
+      - test
+    do:
+      cmd: python src/mlops_ods/dvc_functions cli-apply-scaler src/mlops_ods/dataset/features/${item}.csv
+        src/mlops_ods/models/scaler.pickle
+        src/mlops_ods/dataset/prepared/${item}_features.npy
+        src/mlops_ods/dataset/prepared/${item}_target.npy
+      deps:
+        - src/mlops_ods/dataset/features/${item}.csv
+        - src/mlops_ods/models/scaler.pickle
+        - src/mlops_ods/dvc_functions/scaler.py
+      outs:
+        - src/mlops_ods/dataset/prepared/${item}_features.npy
+        - src/mlops_ods/dataset/prepared/${item}_target.npy
+  model_train:
+    cmd: python src/mlops_ods/dvc_functions cli-train src/mlops_ods/dataset/prepared/train_features.npy
+      src/mlops_ods/dataset/prepared/train_target.npy
+      src/mlops_ods/models/model_lr.pickle
+    deps:
+      - src/mlops_ods/dataset/prepared/train_features.npy
+      - src/mlops_ods/dataset/prepared/train_target.npy
+      - src/mlops_ods/dvc_functions/models.py
+    outs:
+      - src/mlops_ods/models/model_lr.pickle
+  model_test:
+    cmd: python src/mlops_ods/dvc_functions cli-test src/mlops_ods/dataset/prepared/test_features.npy
+      src/mlops_ods/dataset/prepared/test_target.npy
+      src/mlops_ods/models/model_lr.pickle
+      summary.json
+      conf_matrix.png
+    params:
+      - log_reg
+    deps:
+      - src/mlops_ods/dataset/prepared/test_features.npy
+      - src/mlops_ods/dataset/prepared/test_target.npy
+      - src/mlops_ods/dvc_functions/models.py
+    metrics:
+      - summary.json
+    plots:
+      - conf_matrix.png

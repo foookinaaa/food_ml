@@ -5,8 +5,8 @@ venv
 __pycache__
 .mypy_cache
 .venv
-*.csv
-dataset
+#*.csv
+#dataset
 eda.md
 .DS_Store
 __pycache__/
@@ -17,3 +17,6 @@ dist
 catboost_info
 outputs.*
 outputs/
+/summary.json
+/conf_matrix.png
+creds

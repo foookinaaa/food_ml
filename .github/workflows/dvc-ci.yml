@@ -1,0 +1,28 @@
+name: dvc-ci
+
+on:
+  push:
+    paths:
+      - 'dvc.yaml'
+      - '.github/workflows/dvc-ci.yml'
+
+
+jobs:
+  dvc_pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+
+      - name: Pull data with DVC
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_DVC }}
+        run: |
+          dvc pull
+
+      - name: Reproduce DVC pipeline
+        run: dvc repro
