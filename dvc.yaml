@@ -42,6 +42,7 @@ stages:
     cmd: python src/mlops_ods/dvc_functions cli-train src/mlops_ods/dataset/prepared/train_features.npy
       src/mlops_ods/dataset/prepared/train_target.npy
       src/mlops_ods/models/model_lr.pickle
+      log_reg
     deps:
       - src/mlops_ods/dataset/prepared/train_features.npy
       - src/mlops_ods/dataset/prepared/train_target.npy
