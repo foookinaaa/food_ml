@@ -41,22 +41,22 @@ stages:
   model_train:
     cmd: python src/mlops_ods/dvc_functions cli-train src/mlops_ods/dataset/prepared/train_features.npy
       src/mlops_ods/dataset/prepared/train_target.npy
-      src/mlops_ods/models/model_lr.pickle
-      log_reg
+      src/mlops_ods/models/model_cb.pickle
+      catboost
     deps:
       - src/mlops_ods/dataset/prepared/train_features.npy
       - src/mlops_ods/dataset/prepared/train_target.npy
       - src/mlops_ods/dvc_functions/models.py
     outs:
-      - src/mlops_ods/models/model_lr.pickle
+      - src/mlops_ods/models/model_cb.pickle
   model_test:
     cmd: python src/mlops_ods/dvc_functions cli-test src/mlops_ods/dataset/prepared/test_features.npy
       src/mlops_ods/dataset/prepared/test_target.npy
-      src/mlops_ods/models/model_lr.pickle
+      src/mlops_ods/models/model_cb.pickle
       summary.json
       conf_matrix.png
     params:
-      - log_reg
+      - catboost
     deps:
       - src/mlops_ods/dataset/prepared/test_features.npy
       - src/mlops_ods/dataset/prepared/test_target.npy
