@@ -122,7 +122,8 @@ stages:
       size: 1565344
   model_train:
     cmd: python src/mlops_ods/dvc_functions cli-train src/mlops_ods/dataset/prepared/train_features.npy
-      src/mlops_ods/dataset/prepared/train_target.npy src/mlops_ods/models/model_lr.pickle
+      src/mlops_ods/dataset/prepared/train_target.npy src/mlops_ods/models/model_cb.pickle
+      catboost
     deps:
     - path: src/mlops_ods/dataset/prepared/train_features.npy
       hash: md5
@@ -134,16 +135,16 @@ stages:
       size: 3652288
     - path: src/mlops_ods/dvc_functions/models.py
       hash: md5
-      md5: 7ea980bf0c14a43e1533def2f4c13935
-      size: 2192
+      md5: 599cd00e2cc24bf3ced69c9267948b9b
+      size: 2585
     outs:
-    - path: src/mlops_ods/models/model_lr.pickle
+    - path: src/mlops_ods/models/model_cb.pickle
       hash: md5
-      md5: 2cc13c16eb6d2a3c551784da045efb91
-      size: 1090
+      md5: 0286ebd9b918f50c4aa09c6c18905be0
+      size: 221448
   model_test:
     cmd: python src/mlops_ods/dvc_functions cli-test src/mlops_ods/dataset/prepared/test_features.npy
-      src/mlops_ods/dataset/prepared/test_target.npy src/mlops_ods/models/model_lr.pickle
+      src/mlops_ods/dataset/prepared/test_target.npy src/mlops_ods/models/model_cb.pickle
       summary.json conf_matrix.png
     deps:
     - path: src/mlops_ods/dataset/prepared/test_features.npy
@@ -156,20 +157,20 @@ stages:
       size: 1565344
     - path: src/mlops_ods/dvc_functions/models.py
       hash: md5
-      md5: 7ea980bf0c14a43e1533def2f4c13935
-      size: 2192
+      md5: 599cd00e2cc24bf3ced69c9267948b9b
+      size: 2585
     params:
       params.yaml:
-        log_reg:
-          random_state: 42
-          max_iter: 300
-          C: 10
+        catboost:
+          random_seed: 42
+          iterations: 100
+          verbose: false
     outs:
     - path: conf_matrix.png
       hash: md5
-      md5: 99c5653233f84c6ea02ae9eb08a9fc75
-      size: 15894
+      md5: 4a93ccdda8f3a9d9666cb4456a796b94
+      size: 16852
     - path: summary.json
       hash: md5
-      md5: 9f41c2070a00673624dc75aac7850bbe
-      size: 661
+      md5: 4b8520446c3f3990a7c35b89a090dda5
+      size: 669

@@ -25,4 +25,11 @@ jobs:
           dvc pull
 
       - name: Reproduce DVC pipeline
-        run: dvc repro
+        run: |
+          export PYTHONPATH='src'
+          dvc repro
+
+      - name: Push results of DVC pipeline
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_DVC }}
+        run: dvc push

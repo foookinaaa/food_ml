@@ -3,5 +3,10 @@ log_reg:
   max_iter: 300
   C: 10
 
+catboost:
+  random_seed: 42
+  iterations: 100
+  verbose: False
+
 test_size: 0.3
 random_state: 42

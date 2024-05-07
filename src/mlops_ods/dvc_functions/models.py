@@ -1,11 +1,13 @@
 import json
 import pickle
 from pathlib import Path
+from typing import Union
 
 import click
 import dvc.api
 import matplotlib.pyplot as plt
 import numpy as np
+from catboost import CatBoostClassifier
 from matplotlib.figure import Figure
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report
@@ -23,15 +25,24 @@ def conf_matrix(y_true: np.ndarray, y_pred: np.ndarray) -> Figure:
     return fig
 
 
-def train(data: np.ndarray, target: np.ndarray) -> LogisticRegression:
+def train(
+    data: np.ndarray, target: np.ndarray, model_name: str
+) -> Union[LogisticRegression, CatBoostClassifier]:
     params = dvc.api.params_show()
-    model_lr = LogisticRegression(**params["log_reg"])
-    model_lr.fit(data, target)
-    return model_lr
+    model = None
+    if model_name == "log_reg":
+        model = LogisticRegression(**params[model_name])
+        model.fit(data, target)
+    elif model_name == "catboost":
+        model = CatBoostClassifier(**params[model_name])
+        model.fit(data, target)
+    return model
 
 
 def test(
-    model: LogisticRegression, data: np.ndarray, target: np.ndarray
+    model: Union[LogisticRegression, CatBoostClassifier],
+    data: np.ndarray,
+    target: np.ndarray,
 ) -> tuple[dict, Figure]:
     predicts = model.predict(data)
     fig = conf_matrix(target, predicts)
@@ -42,14 +53,16 @@ def test(
 @click.argument("train_frame_path", type=Path)
 @click.argument("train_target_path", type=Path)
 @click.argument("model_path", type=Path)
+@click.argument("model_name", type=str)
 def cli_train(
-    train_frame_path: Path,
-    train_target_path: Path,
+    train_frame_path: str,
+    train_target_path: str,
     model_path: Path,
+    model_name: str,
 ):
     train_features = np.load(train_frame_path)
     train_target = np.load(train_target_path)
-    model = train(train_features, train_target)
+    model = train(train_features, train_target, model_name)
     pickle.dump(model, model_path.open("wb"))
 
 
@@ -60,8 +73,8 @@ def cli_train(
 @click.argument("metric_path", type=Path)
 @click.argument("figure_path", type=Path)
 def cli_test(
-    test_frame_path: Path,
-    test_target_path: Path,
+    test_frame_path: str,
+    test_target_path: str,
     model_path: Path,
     metric_path: Path,
     figure_path: Path,
