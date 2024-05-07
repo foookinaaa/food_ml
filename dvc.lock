@@ -135,8 +135,8 @@ stages:
       size: 3652288
     - path: src/mlops_ods/dvc_functions/models.py
       hash: md5
-      md5: 264daf768e86edc5c784dc9156d7cd29
-      size: 2589
+      md5: 599cd00e2cc24bf3ced69c9267948b9b
+      size: 2585
     outs:
     - path: src/mlops_ods/models/model_lr.pickle
       hash: md5
@@ -157,8 +157,8 @@ stages:
       size: 1565344
     - path: src/mlops_ods/dvc_functions/models.py
       hash: md5
-      md5: 264daf768e86edc5c784dc9156d7cd29
-      size: 2589
+      md5: 599cd00e2cc24bf3ced69c9267948b9b
+      size: 2585
     params:
       params.yaml:
         log_reg:

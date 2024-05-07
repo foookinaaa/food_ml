@@ -55,8 +55,8 @@ def test(
 @click.argument("model_path", type=Path)
 @click.argument("model_name", type=str)
 def cli_train(
-    train_frame_path: Path,
-    train_target_path: Path,
+    train_frame_path: str,
+    train_target_path: str,
     model_path: Path,
     model_name: str,
 ):
@@ -73,8 +73,8 @@ def cli_train(
 @click.argument("metric_path", type=Path)
 @click.argument("figure_path", type=Path)
 def cli_test(
-    test_frame_path: Path,
-    test_target_path: Path,
+    test_frame_path: str,
+    test_target_path: str,
     model_path: Path,
     metric_path: Path,
     figure_path: Path,
