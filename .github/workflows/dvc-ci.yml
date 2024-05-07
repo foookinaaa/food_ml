@@ -25,7 +25,9 @@ jobs:
           dvc pull
 
       - name: Reproduce DVC pipeline
-        run: dvc repro
+        run: |
+          export PYTHONPATH='src'
+          dvc repro
 
       - name: Push results of DVC pipeline
         env:
