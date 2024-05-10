@@ -1,5 +1,6 @@
 import pandas as pd
 import yaml
+from sklearn.preprocessing import LabelEncoder
 
 import lakefs
 from lakefs.client import Client
@@ -29,11 +30,7 @@ def main():
         )
     except:  # noqa: E722
         repo = lakefs.Repository("mlops-example", client=clt)
-        branch1 = (
-            lakefs.repository("mlops-example", client=clt)
-            .branch("experiment1")
-            .create(source_reference="main")
-        )
+        branch1 = lakefs.repository("mlops-example", client=clt).branch("experiment1")
     main_br = repo.branch("main")
 
     # read
@@ -49,6 +46,10 @@ def main():
     df = df[~df["health"].isna()]
     drop_columns(df)
     preprocess_data(df)
+    # change preprocess here
+    le = LabelEncoder()
+    df["borough"] = le.fit_transform(df["borough"])
+    #
     obj = branch1.object(path="csv/preprocess_data.csv")
     with obj.writer(mode="w", pre_sign=False, content_type="text/csv") as fd:
         df.to_csv(fd, index=False)
