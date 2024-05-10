@@ -9,9 +9,13 @@ clt = Client(
     username="AKIAJODO3YZ444RWVYRQ",
     password="LdOEm437fvEu6UlA0pxL3B7uVaePDv1pPQwtdcsc",
 )
+# repo = lakefs.Repository("mlops-example", client=clt) /
+# .create(storage_namespace="s3://mlops-data-bucket/")
+# branch1 = lakefs.repository("mlops-example") /
+# .branch("experiment1").create(source_reference="main")
 branch1 = lakefs.repository("mlops-example", client=clt).branch("experiment1")
 
-with branch1.object(path="csv/raw_data.csv").upload(
-    content_type="text/csv", data="raw data"
-) as f:
-    df.to_csv(f, index=False)
+obj = branch1.object(path="csv/raw_data.csv")
+
+with obj.writer(mode="w", pre_sign=False, content_type="text/csv") as fd:
+    df.to_csv(fd, index=False)
