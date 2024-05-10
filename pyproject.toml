@@ -20,6 +20,8 @@ hydra-core = "^1.3.2"
 dvc = "^3.50.1"
 dvc-gdrive = "^3.0.1"
 click = "^8.1.7"
+lakefs-spec = "^0.9.0"
+minio = "^7.2.7"
 
 
 [tool.poetry.group.dev.dependencies]

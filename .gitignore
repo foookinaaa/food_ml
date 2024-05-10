@@ -20,3 +20,4 @@ outputs/
 /summary.json
 /conf_matrix.png
 creds
+src/lakefs/.lakectl.yaml
