@@ -8,3 +8,5 @@ docker run --name lakefs \
              treeverse/lakefs:latest \
              run --local-settings
 ```
+two different preprocessing of data:
+![lakefs_exp](./lakefs.png)
