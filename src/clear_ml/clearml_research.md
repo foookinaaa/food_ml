@@ -17,4 +17,13 @@ python src/clear_ml
 poetry add clearml-agent
 nano ~/clearml.conf
 clearml-agent daemon --detached --queue default
+
+clearml-agent daemon  --stop
 ```
+* log_reg: baseline
+* log_reg with other params: Remote baseline
+* catboost: from notebook
+![clearml_metrics1](./graphs/metrics.png)
+![clearml_metrics2](./graphs/matrix.png)
+
+Catboost predicts all 3 classes better than log reg (predicts only class 2 good, and bad others, especially class 0)
