@@ -33,15 +33,15 @@ if args["dataset_task_id"]:
         )
     )
     # download the artifact
-    data_pickle = dataset_upload_task.artifacts["dataset"].get_local_copy()
+    data = dataset_upload_task.artifacts["dataset"].get_local_copy()
 # get the dataset from a direct url
 elif args["dataset_url"]:
-    data_pickle = StorageManager.get_local_copy(remote_url=args["dataset_url"])
+    data = StorageManager.get_local_copy(remote_url=args["dataset_url"])
 else:
     raise ValueError("Missing dataset link")
 
 # open the local copy
-df = pd.read_pickle(data_pickle)
+df = pd.read_csv(data)
 
 # "process" data
 cfg = compose_config()

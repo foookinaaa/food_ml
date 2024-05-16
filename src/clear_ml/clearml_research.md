@@ -27,3 +27,6 @@ clearml-agent daemon  --stop
 ![clearml_metrics2](./graphs/matrix.png)
 
 Catboost predicts all 3 classes better than log reg (predicts only class 2 good, and bad others, especially class 0)
+
+In pipeline:
+![clearml_pipe](./graphs/pipeline.png)
