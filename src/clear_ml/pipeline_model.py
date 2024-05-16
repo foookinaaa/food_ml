@@ -30,8 +30,7 @@ if __name__ == "__main__":
         parameter_override={"General/dataset_task_id": "${stage_process.id}"},
     )
 
-    # Use run_pipeline_steps_locally=True
-    pipe.start_locally(run_pipeline_steps_locally=True)
-    # pipe.start()
+    # pipe.start_locally(run_pipeline_steps_locally=True)
+    pipe.start(queue="default")
 
     print("pipeline completed")
