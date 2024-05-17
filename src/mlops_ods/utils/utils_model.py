@@ -82,4 +82,6 @@ def preprocess_data(df: pd.DataFrame) -> None:
     )
     df["spc_common"] = df["spc_common"].fillna("n/d")
     df["problems"] = df["problems"].fillna("").apply(lambda x: len(x.split(",")))
-    df["health"] = df["health"].map({"Poor": 0, "Fair": 1, "Good": 2}).astype(int)
+    df["health"] = (
+        df["health"].map({"Poor": 0, "Fair": 1, "Good": 2}).fillna(-1).astype(int)
+    )

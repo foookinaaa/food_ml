@@ -1,6 +1,9 @@
+import hypothesis.strategies as st
 import numpy as np
 import pandas as pd
+from hypothesis.extra.pandas import column, data_frames, range_indexes
 
+from hypothesis import given
 from mlops_ods.utils.utils_model import drop_columns, preprocess_data, yes_no_to_numeric
 
 
@@ -101,3 +104,71 @@ def test_preprocess_data():
     assert df["spc_common"].tolist() == ["Oak", "n/d", "Maple"]
     assert df["problems"].tolist() == [2, 2, 1]
     assert df["health"].tolist() == [0, 1, 2]
+
+
+@given(st.lists(st.text()))
+def test_yes_no_to_numeric_hyp(column):
+    result = yes_no_to_numeric(column)
+    if column == "Yes":
+        assert result == 1
+    else:
+        assert result == 0
+
+
+df_columns = {
+    "root_stone": {
+        "elements": st.one_of(st.sampled_from(["Yes", "No"]), st.none()),
+        "unique": False,
+    },
+    "root_grate": {
+        "elements": st.one_of(st.sampled_from(["Yes", "No"]), st.none()),
+        "unique": False,
+    },
+    "root_other": {
+        "elements": st.one_of(st.sampled_from(["Yes", "No"]), st.none()),
+        "unique": False,
+    },
+    "curb_loc": {"elements": st.text(), "unique": False},
+    "sidewalk": {"elements": st.text(), "unique": False},
+    "steward": {"elements": st.text(), "unique": False},
+    "guards": {"elements": st.text(), "unique": False},
+    "spc_common": {"elements": st.text(), "unique": False},
+    "problems": {"elements": st.text(), "unique": False},
+    "user_type": {"elements": st.text(), "unique": False},
+    "health": {"elements": st.text(), "unique": False},
+    "trunk_wire": {"elements": st.booleans(), "unique": False},
+    "trnk_light": {"elements": st.booleans(), "unique": False},
+    "trnk_other": {"elements": st.booleans(), "unique": False},
+    "brch_light": {"elements": st.booleans(), "unique": False},
+    "brch_shoe": {"elements": st.booleans(), "unique": False},
+    "brch_other": {"elements": st.booleans(), "unique": False},
+}
+test_dfs = data_frames(
+    index=range_indexes(min_size=5),
+    columns=[column(key, **value) for key, value in df_columns.items()],
+)
+
+
+@given(data=test_dfs)
+def test_preprocess_data_hyp(data):
+    preprocess_data(data)
+
+    for col in [
+        "root_stone",
+        "root_grate",
+        "root_other",
+        "trunk_wire",
+        "trnk_light",
+        "trnk_other",
+        "brch_light",
+        "brch_shoe",
+        "brch_other",
+    ]:
+        assert data[col].isin([0, 1]).all()
+        assert data["curb_loc"].isin([0, 1]).all()
+        assert data["sidewalk"].isin([0, 1]).all()
+        assert data["steward"].isin([0, 1, 2, 3]).all()
+        assert data["guards"].isin([0, 1, 2, 3]).all()
+        assert data["spc_common"].notna().all()
+        assert data["problems"].apply(lambda x: isinstance(x, int)).all()
+        assert data["health"].isin([0, 1, 2, -1]).all()
