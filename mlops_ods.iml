@@ -29,6 +29,10 @@
       <excludeFolder url="file://$MODULE_DIR$/creds" />
       <excludeFolder url="file://$MODULE_DIR$/src/mlflow/catboost_info" />
       <excludeFolder url="file://$MODULE_DIR$/mlartifacts" />
+      <excludeFolder url="file://$MODULE_DIR$/src/clear_ml/.ipynb_checkpoints" />
+      <excludeFolder url="file://$MODULE_DIR$/src/clear_ml/catboost_info" />
+      <excludeFolder url="file://$MODULE_DIR$/mlruns" />
+      <excludeFolder url="file://$MODULE_DIR$/tests/.hypothesis" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (mlops_ods)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
