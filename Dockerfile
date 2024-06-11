@@ -26,3 +26,8 @@ RUN poetry install
 #RUN rm mlops_ods-0.1.0-py3-none-any.whl
 
 #COPY ./ ./
+
+# fastapi
+#COPY ./ /app
+#ENV PYTHONPATH=/app/src
+#CMD ["poetry", "run", "uvicorn", "src.fast_api.app:app", "--host", "0.0.0.0", "--port", "8000"]
