@@ -1,9 +1,14 @@
 import os
 
 import pandas as pd
+import torch
+from loguru import logger
 
 import mlops_ods.utils.utils_etl as ut_etl
 from fast_api.schemas.requests import FeatureRequest
+
+# num of treads
+torch.set_num_threads(1)
 
 
 class TreeHealthClassifier:
@@ -39,4 +44,5 @@ class TreeHealthClassifier:
             name_health: round(score, 4)
             for name_health, score in zip(health_classes.values(), prediction)
         }
+        logger.info(result)
         return result

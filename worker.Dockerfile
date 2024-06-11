@@ -16,18 +16,7 @@ RUN poetry config virtualenvs.create false
 COPY pyproject.toml poetry.lock ./
 RUN poetry install
 
-# Snakemake
-#RUN apt-get -y install graphviz
-#RUN pip install snakemake
-#
-## install package
-#COPY dist/mlops_ods-0.1.0-py3-none-any.whl .
-#RUN pip install mlops_ods-0.1.0-py3-none-any.whl
-#RUN rm mlops_ods-0.1.0-py3-none-any.whl
-
-#COPY ./ ./
-
-# fastapi
+# fastapi / celery
 COPY ./ /app
 ENV PYTHONPATH=/app/src
-CMD ["poetry", "run", "uvicorn", "src.fast_api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "celery", "-A", "src.fast_api.worker.predict_worker", "worker", "-l", "INFO"]
