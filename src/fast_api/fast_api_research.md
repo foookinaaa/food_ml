@@ -81,3 +81,39 @@ Answer on test:
 ```
 {"Poor":0.0189,"Fair":0.1347,"Good":0.8464}
 ```
+
+With celery:
+```
+model_service_api
+├─ .docker
+│  ├─ api.Dockerfile
+│  └─ worker.Dockerfile
+├─ docker-compose.yml
+├─ poetry.lock
+├─ pyproject.toml
+└─ src
+   ├─ api
+   │  ├─ __init__.py
+   │  └─ routes
+   │     ├─ __init__.py
+   │     ├─ healthcheck.py
+   │     ├─ predict.py
+   │     └─ router.py
+   ├─ app.py
+   ├─ connections
+   │  └─ broker.py
+   ├─ models
+   │  ├─ __init__.py
+   │  ├─ healthcheck.py
+   │  └─ requests.py
+   ├─ services
+   │  ├─ __init__.py
+   │  ├─ model.py
+   │  └─ utils.py
+   └─ worker
+      └─ predict_worker.py
+
+```
+```commandline
+docker-compose --project-directory src/fast_api/. down
+```
