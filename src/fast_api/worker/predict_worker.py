@@ -6,7 +6,7 @@ from src.fast_api.connections.broker import celery_app
 
 
 @celery_app.task(name="predict")
-def predict_emotion(features: FeatureRequest):
+def predict_health(features: FeatureRequest):
     """
     Predict health of tree
 
@@ -15,5 +15,5 @@ def predict_emotion(features: FeatureRequest):
         result = TreeHealthClassifier.predict(features)
         return result
     except Exception as ex:
-        logger.error([ex])
+        logger.exception(ex)
         return None

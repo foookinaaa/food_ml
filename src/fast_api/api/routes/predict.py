@@ -22,7 +22,7 @@ async def predict(
     Returns:
         dict: predictions as dict
     """
-    async_result = celery_app.send_task("predict", args=[feature_request])
+    async_result = celery_app.send_task("predict", args=[feature_request.dict()])
     result = async_result.get()
 
     background_tasks.add_task(

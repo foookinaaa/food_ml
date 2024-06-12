@@ -37,7 +37,7 @@ class TreeHealthClassifier:
         Returns:
             dict: Prediction of tree health
         """
-        df = pd.DataFrame([features.dict()])
+        df = pd.DataFrame([features])
         prediction = cls.model.predict_proba(df)[0]
         health_classes = {0: "Poor", 1: "Fair", 2: "Good"}
         result = {

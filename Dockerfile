@@ -28,6 +28,6 @@ RUN poetry install
 #COPY ./ ./
 
 # fastapi
-COPY ./ /app
-ENV PYTHONPATH=/app/src
-CMD ["poetry", "run", "uvicorn", "src.fast_api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+#COPY ./ /app
+#ENV PYTHONPATH=/app/src
+#CMD ["poetry", "run", "uvicorn", "src.fast_api.app:app", "--host", "0.0.0.0", "--port", "8000"]

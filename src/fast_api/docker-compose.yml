@@ -6,7 +6,7 @@ services:
       context: ../../
       dockerfile: Dockerfile
     ports:
-      - "7010:8000"
+      - "7007:8000"
     depends_on:
       - rabbitmq
       - worker
