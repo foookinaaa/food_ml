@@ -1,5 +1,7 @@
 # Model Service Api
 
+### !!! Uncomment fastapi instructions in Dockerfile !!!
+
 Example The ML service is a web application that provides an API for interacting with a machine learning model. It allows users to send queries with prediction data and get results back.
 
 **Startup logic:**
@@ -32,7 +34,7 @@ When launched, the application initializes FastAPI, which handles HTTP requests.
 
 ## Getting started
 local test:
-```commandline
+```
 export PYTHONPATH='src'
 poetry run uvicorn src.fast_api.app:app --host 0.0.0.0 --port 8000
 ```
