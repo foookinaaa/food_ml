@@ -30,12 +30,10 @@ jobs:
           poetry config --local cache-dir $PWD/.poetry/cache
           poetry install --no-root
 
-      - name: Install model package from pypi
-        run: |
-          pip install mlops-ods
-
       - name: Train model
-        run: poetry run python src/mlops_ods/train.py
+        run: |
+          export PYTHONPATH='src'
+          poetry run python src/mlops_ods/train.py
 
       - name: Bump version
         id: bump-version
