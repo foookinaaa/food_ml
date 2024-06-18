@@ -1,0 +1,93 @@
+name: ML Model CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/resources/model.bin'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Model version to deploy'
+        required: true
+
+jobs:
+  save-and-version-model:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+          poetry config --local cache-dir $PWD/.poetry/cache
+          poetry install --no-root
+
+      - name: Train model
+        run: python src/mlops_ods/train.py
+
+      - name: Bump version
+        id: bump-version
+        run: |
+          if [ -f VERSION ]; then
+            VERSION=$(cat VERSION)
+            NEW_VERSION=$((VERSION + 1))
+          else
+            NEW_VERSION=1
+          fi
+          echo $NEW_VERSION > VERSION
+          echo "::set-output name=new_version::$NEW_VERSION"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add VERSION
+          git commit -m "Bump version to $NEW_VERSION"
+          git tag "v$NEW_VERSION"
+          git push origin main --tags
+
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: model
+          path: src/resources/model.bin
+
+      - name: Upload model to GitHub Packages
+        run: |
+          VERSION=$(cat VERSION)
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build . -t ghcr.io/${{ github.repository }}/model:v$VERSION
+          docker push ghcr.io/${{ github.repository }}/model:v$VERSION
+
+  deploy-model:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: save-and-version-model
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Download specific model version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION=${{ github.event.inputs.version }}
+          else
+            VERSION=$(cat VERSION)
+          fi
+          wget https://github.com/${{ github.repository }}/releases/download/v$VERSION/model.pkl -O model.pkl
+
+      - name: Deploy model
+        run: |
+          # scp model.pkl user@your-server:/path/to/deployment/
+          echo Deployed
