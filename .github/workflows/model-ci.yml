@@ -31,9 +31,7 @@ jobs:
           poetry install --no-root
 
       - name: Create directories
-        run: |
-          ls
-          mkdir -p mlops_ods/resources/
+        run: mkdir -p /home/runner/work/mlops_ods/resources/
 
       - name: Train model
         run: |
