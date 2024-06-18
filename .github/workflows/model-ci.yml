@@ -30,6 +30,9 @@ jobs:
           poetry config --local cache-dir $PWD/.poetry/cache
           poetry install --no-root
 
+      - name: Create directories
+        run: mkdir -p resources/
+
       - name: Train model
         run: |
           export PYTHONPATH='src'
