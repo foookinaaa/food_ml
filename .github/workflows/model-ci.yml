@@ -1,16 +1,16 @@
 name: ML Model CI/CD
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/resources/model.bin'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Model version to deploy'
-        required: true
+on: [push]
+#  push:
+#    branches:
+#      - main
+#    paths:
+#      - 'src/resources/model.bin'
+#  workflow_dispatch:
+#    inputs:
+#      version:
+#        description: 'Model version to deploy'
+#        required: true
 
 jobs:
   save-and-version-model:
