@@ -38,6 +38,12 @@ jobs:
           export PYTHONPATH='src'
           poetry run python src/mlops_ods/train.py
 
+      - name: Ensure VERSION file exists
+        run: |
+          if [ ! -f VERSION ]; then
+          echo "0" > VERSION
+          fi
+
       - name: Get current version
         id: get-version
         run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
