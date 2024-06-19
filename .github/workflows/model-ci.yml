@@ -66,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: model
-          path: src/resources/model.bin
+          path: mlops_ods/resources/model.bin
 
       - name: Upload model to GitHub Packages
         run: |
@@ -76,7 +76,6 @@ jobs:
           docker push ghcr.io/${{ github.repository }}/model:v$VERSION
 
   deploy-model:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: save-and-version-model
     runs-on: ubuntu-latest
 
