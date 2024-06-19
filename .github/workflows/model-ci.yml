@@ -90,11 +90,7 @@ jobs:
 
       - name: Download specific model version
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            VERSION=${{ github.event.inputs.version }}
-          else
-            VERSION=$(cat VERSION)
-          fi
+          VERSION=${{ github.event.inputs.version }}
           wget https://github.com/${{ github.repository }}/releases/download/v$VERSION/model.pkl -O model.pkl
 
       - name: Deploy model
