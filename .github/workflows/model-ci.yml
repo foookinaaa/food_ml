@@ -69,7 +69,7 @@ jobs:
 
       - name: Set output version
         id: set-output-version
-        run: echo "version=$(cat VERSION)" >> $GITHUB_ENV
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
 
       - name: Upload model artifact
         uses: actions/upload-artifact@v2
