@@ -1,10 +1,9 @@
 name: package
 
-#on: [push]
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   linting:

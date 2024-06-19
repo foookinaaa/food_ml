@@ -3,10 +3,10 @@ name: ML Model CI/CD
 on:
   push:
     branches:
-      - main
+      - master
       - build_ci
-#    paths:
-#      - 'src/resources/model.bin'
+    paths:
+      - 'src/resources/model.bin'
   workflow_dispatch:
     inputs:
       version:
@@ -98,10 +98,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.11'
-
-      - name: Debug version
-        run: |
-          echo "Deploying Docker image for version ${{ needs.save-and-version-model.outputs.model_version }}"
 
       - name: Download specific model version
         run: |
