@@ -41,12 +41,15 @@ jobs:
       - name: Ensure VERSION file exists
         run: |
           if [ ! -f VERSION ]; then
-          echo "0" > VERSION
+            echo "0" > VERSION
           fi
 
       - name: Get current version
         id: get-version
-        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+        run: |
+          VERSION=$(cat VERSION)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION"
 
       - name: Bump version
         id: bump-version
@@ -75,6 +78,7 @@ jobs:
       - name: Upload model to GitHub Packages
         run: |
           VERSION=$(cat VERSION)
+          echo "Uploading Docker image for version $VERSION"
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker build . -t ghcr.io/${{ github.repository }}/model:v$VERSION
           docker push ghcr.io/${{ github.repository }}/model:v$VERSION
@@ -92,12 +96,17 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Debug version
+        run: |
+          echo "Deploying Docker image for version ${{ needs.save-and-version-model.outputs.version }}"
+
       - name: Download specific model version
         run: |
           VERSION=${{ needs.save-and-version-model.outputs.version }}
+          echo "Pulling Docker image for version $VERSION"
           docker pull ghcr.io/${{ github.repository }}/model:v$VERSION
 
       - name: Deploy model
         run: |
           # scp model.pkl user@your-server:/path/to/deployment/
-          echo Deployed
+          echo "Deployed model version $VERSION"
