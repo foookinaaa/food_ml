@@ -38,23 +38,23 @@ jobs:
           export PYTHONPATH='src'
           poetry run python src/mlops_ods/train.py
 
+      - name: Get current version
+        id: get-version
+        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+
       - name: Bump version
         id: bump-version
         run: |
-          if [ -f VERSION ]; then
-            VERSION=$(cat VERSION)
-            NEW_VERSION=$((VERSION + 1))
-          else
-            NEW_VERSION=1
-          fi
+          VERSION=$(cat VERSION)
+          NEW_VERSION=$((VERSION + 1))
           echo $NEW_VERSION > VERSION
-          echo "::set-output name=new_version::$NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add VERSION
           git commit -m "Bump version to $NEW_VERSION"
           git tag "v$NEW_VERSION"
-          git push origin main --tags
+#          git push origin master --tags
 
       - name: Upload model artifact
         uses: actions/upload-artifact@v2
