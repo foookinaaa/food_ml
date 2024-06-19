@@ -15,6 +15,8 @@ on: [push]
 jobs:
   save-and-version-model:
     runs-on: ubuntu-latest
+    outputs:
+      model_version: ${{ steps.set-output-version.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -98,15 +100,16 @@ jobs:
 
       - name: Debug version
         run: |
-          echo "Deploying Docker image for version ${{ needs.save-and-version-model.outputs.version }}"
+          echo "Deploying Docker image for version ${{ needs.save-and-version-model.outputs.model_version }}"
 
       - name: Download specific model version
         run: |
-          VERSION=${{ needs.save-and-version-model.outputs.version }}
+          VERSION=${{ needs.save-and-version-model.outputs.model_version }}
           echo "Pulling Docker image for version $VERSION"
           docker pull ghcr.io/${{ github.repository }}/model:v$VERSION
 
       - name: Deploy model
         run: |
+          VERSION=${{ needs.save-and-version-model.outputs.model_version }}
           # scp model.pkl user@your-server:/path/to/deployment/
           echo "Deployed model version $VERSION"
