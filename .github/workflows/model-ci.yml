@@ -1,0 +1,120 @@
+name: ML Model CI/CD
+
+on:
+  push:
+    branches:
+      - master
+      - build_ci
+    paths:
+      - 'src/resources/model.bin'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Model version to deploy'
+        required: true
+
+jobs:
+  save-and-version-model:
+    runs-on: ubuntu-latest
+    outputs:
+      model_version: ${{ steps.set-output-version.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+          poetry config --local cache-dir $PWD/.poetry/cache
+          poetry install --no-root
+
+      - name: Create directories
+        run: mkdir -p /home/runner/work/mlops_ods/resources/
+
+      - name: Train model
+        run: |
+          export PYTHONPATH='src'
+          poetry run python src/mlops_ods/train.py
+
+      - name: Ensure VERSION file exists
+        run: |
+          if [ ! -f VERSION ]; then
+            echo "0" > VERSION
+          fi
+
+      - name: Get current version
+        id: get-version
+        run: |
+          VERSION=$(cat VERSION)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION"
+
+      - name: Bump version
+        id: bump-version
+        run: |
+          VERSION=$(cat VERSION)
+          NEW_VERSION=$((VERSION + 1))
+          echo $NEW_VERSION > VERSION
+          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add VERSION
+          git commit -m "Bump version to $NEW_VERSION"
+          git tag "v$NEW_VERSION"
+          git push origin HEAD --tags
+
+      - name: Set output version
+        id: set-output-version
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: model
+          path: /home/runner/work/mlops_ods/resources/model.bin
+
+      - name: Upload model to GitHub Packages
+        run: |
+          VERSION=$(cat VERSION)
+          echo "Uploading Docker image for version $VERSION"
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build . -t ghcr.io/${{ github.repository }}/model:v$VERSION
+          docker push ghcr.io/${{ github.repository }}/model:v$VERSION
+
+  deploy-model:
+    needs: save-and-version-model
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Download specific model version
+        run: |
+          VERSION=${{ needs.save-and-version-model.outputs.model_version }}
+          echo "Pulling Docker image for version $VERSION"
+          docker pull ghcr.io/${{ github.repository }}/model:v$VERSION
+
+      - name: Deploy app with new model version
+        run: |
+          echo "Deployed model version $VERSION"
+          # scp model.bin user@your-server:/path/to/deployment/
+          # Replace with actual deployment steps (e.g., update Kubernetes deployment, restart service, etc.)
+          # Example commands assuming FastAPI is running in Docker
+          # docker stop fastapi-container
+          # docker rm fastapi-container
+          # docker run -d --name fastapi-container -p 7007:7007 ghcr.io/${{ github.repository }}/model:v$VERSION
+          # Wait for FastAPI to start (optional)
+          # sleep 10
+          # Check FastAPI logs for verification (optional)
+          # docker logs fastapi-container
