@@ -90,7 +90,7 @@ jobs:
 
       - name: Download specific model version
         run: |
-          VERSION=${{ github.event.inputs.version }}
+          VERSION=$(cat VERSION)
           wget https://github.com/${{ github.repository }}/releases/download/v$VERSION/model.pkl -O model.pkl
 
       - name: Deploy model
