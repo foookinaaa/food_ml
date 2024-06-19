@@ -1,16 +1,17 @@
 name: ML Model CI/CD
 
-on: [push]
-#  push:
-#    branches:
-#      - main
+on:
+  push:
+    branches:
+      - main
+      - build_ci
 #    paths:
 #      - 'src/resources/model.bin'
-#  workflow_dispatch:
-#    inputs:
-#      version:
-#        description: 'Model version to deploy'
-#        required: true
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Model version to deploy'
+        required: true
 
 jobs:
   save-and-version-model:
@@ -108,8 +109,16 @@ jobs:
           echo "Pulling Docker image for version $VERSION"
           docker pull ghcr.io/${{ github.repository }}/model:v$VERSION
 
-      - name: Deploy model
+      - name: Deploy app with new model version
         run: |
-          VERSION=${{ needs.save-and-version-model.outputs.model_version }}
-          # scp model.bin user@your-server:/path/to/deployment/
           echo "Deployed model version $VERSION"
+          # scp model.bin user@your-server:/path/to/deployment/
+          # Replace with actual deployment steps (e.g., update Kubernetes deployment, restart service, etc.)
+          # Example commands assuming FastAPI is running in Docker
+          # docker stop fastapi-container
+          # docker rm fastapi-container
+          # docker run -d --name fastapi-container -p 7007:7007 ghcr.io/${{ github.repository }}/model:v$VERSION
+          # Wait for FastAPI to start (optional)
+          # sleep 10
+          # Check FastAPI logs for verification (optional)
+          # docker logs fastapi-container
