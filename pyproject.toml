@@ -29,6 +29,8 @@ fastapi = "^0.111.0"
 loguru = "^0.7.2"
 celery = "^5.4.0"
 streamlit = "^1.35.0"
+feast = "^0.39.0"
+feast-cassandra = "^0.1.4"
 
 
 [tool.poetry.group.dev.dependencies]
